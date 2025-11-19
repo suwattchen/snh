@@ -1,0 +1,5 @@
+{
+  "name": "Sunmart NexusHost Automation",
+  "description": "A complete self-hosted hosting provider dashboard. Features automated service provisioning simulation, client management area, server resource monitoring, and an AI-powered technical support agent using Gemini.",
+  "requestFramePermissions": []
+}
