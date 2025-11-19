@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # 1. Frontend (Next.js/React)
+  nexushost-frontend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3001
+    depends_on:
+      - nexushost-api
+
+  # 2. Backend API (Node.js + Dockerode)
+  nexushost-api:
+    build: ./api
+    ports:
+      - "3001:3001"
+    volumes:
+      # CRITICAL: Give container access to Host's Docker Engine
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=nexus_user
+      - DB_PASS=nexus_password
+    depends_on:
+      - mariadb
+
+  # 3. Database (User data & Billing)
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      - MARIADB_ROOT_PASSWORD=root_secret
+      - MARIADB_DATABASE=nexushost_db
+      - MARIADB_USER=nexus_user
+      - MARIADB_PASSWORD=nexus_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  # 4. Cloudflare Tunnel (Ingress)
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN} # Set this in .env
+    restart: always
+
+volumes:
+  mariadb_data:

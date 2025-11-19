@@ -1,4 +1,5 @@
-import { AppTemplate, HostingPlan, PlanType } from './types';
+
+import { AppTemplate, HostingPlan, PlanType, Backup, BackupStatus, SystemContainer } from './types';
 
 export const APP_TEMPLATES: AppTemplate[] = [
   {
@@ -11,6 +12,28 @@ export const APP_TEMPLATES: AppTemplate[] = [
     recommendedPlan: 'plan_wp',
     minPort: 80,
     envVars: ['WORDPRESS_DB_HOST', 'WORDPRESS_DB_PASSWORD']
+  },
+  {
+    id: 'nextcloud-server',
+    name: 'Nextcloud',
+    description: 'A safe home for all your data. File storage, video calls, and more.',
+    category: 'CMS', // Using CMS category for simplicity in type, functionally Storage
+    icon: 'Cloud',
+    image: 'nextcloud:latest',
+    recommendedPlan: 'plan_stack', // Needs more storage
+    minPort: 80,
+    envVars: ['SQLITE_DATABASE']
+  },
+  {
+    id: 'n8n-workflow',
+    name: 'n8n Workflow',
+    description: 'Workflow automation tool. Connect apps and APIs together.',
+    category: 'Runtime',
+    icon: 'GitBranch',
+    image: 'n8nio/n8n',
+    recommendedPlan: 'plan_node',
+    minPort: 5678,
+    envVars: ['N8N_BASIC_AUTH_ACTIVE', 'N8N_BASIC_AUTH_USER', 'N8N_BASIC_AUTH_PASSWORD']
   },
   {
     id: 'ghost-blog',
@@ -117,3 +140,15 @@ export const MOCK_ADMIN_STATS = {
   activeTunnels: 8,
   totalRevenue: 1250.00
 };
+
+export const SYSTEM_CONTAINERS: SystemContainer[] = [
+  { id: 'sys-nginx', name: 'nginx-proxy-manager', image: 'jc21/nginx-proxy-manager:latest', status: 'Running', uptime: '14d 2h', role: 'Reverse Proxy' },
+  { id: 'sys-db', name: 'mariadb-system', image: 'mariadb:10.11', status: 'Running', uptime: '14d 2h', role: 'Database' },
+  { id: 'sys-tunnel', name: 'cloudflared-connector', image: 'cloudflare/cloudflared:latest', status: 'Running', uptime: '2d 5h', role: 'Tunnel' },
+  { id: 'sys-billing', name: 'nexushost-billing', image: 'custom/billing-core:v2', status: 'Running', uptime: '5d 1h', role: 'Billing' }
+];
+
+export const MOCK_BACKUPS: Backup[] = [
+  { id: 'bk-1', serviceId: 'srv-1', name: 'Weekly Auto Backup', size: '45MB', created_at: '2024-02-10', status: BackupStatus.COMPLETED, type: 'Auto' },
+  { id: 'bk-2', serviceId: 'srv-1', name: 'Pre-Plugin Update', size: '46MB', created_at: '2024-02-12', status: BackupStatus.COMPLETED, type: 'Manual' }
+];

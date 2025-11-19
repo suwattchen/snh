@@ -1,3 +1,4 @@
+
 export enum PlanType {
   STARTER = 'Starter',
   PRO = 'Pro',
@@ -88,4 +89,38 @@ export interface Ticket {
   status: 'Open' | 'Answered' | 'Closed';
   priority: 'Low' | 'Medium' | 'High';
   lastUpdate: string;
+}
+
+export interface DnsRecord {
+  id: string;
+  type: string;
+  name: string;
+  content: string;
+  proxied: boolean;
+  ttl: number;
+}
+
+export enum BackupStatus {
+  COMPLETED = 'Completed',
+  IN_PROGRESS = 'In Progress',
+  FAILED = 'Failed'
+}
+
+export interface Backup {
+  id: string;
+  serviceId: string;
+  name: string;
+  size: string;
+  created_at: string;
+  status: BackupStatus;
+  type: 'Manual' | 'Auto';
+}
+
+export interface SystemContainer {
+  id: string;
+  name: string;
+  image: string;
+  status: 'Running' | 'Stopped' | 'Restarting';
+  uptime: string;
+  role: 'Reverse Proxy' | 'Database' | 'Tunnel' | 'Billing';
 }
